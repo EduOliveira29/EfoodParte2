@@ -7,26 +7,28 @@ import ListaDeProdutos from '../../Componentes/ListaDeProdutos'
 import { Container } from './styles'
 
 export type Restaurante = {
-  id: number
-  titulo: string
-  destacado: boolean
-  tipo: string
-  avaliacao: number
-  descricao: string
-  capa: string
-  cardapio: {
-    foto: string
-    preco: number
-    id: number
-    nome: string
-    descripiton: string
-    porcao: string
-  }
+  id?: number
+  titulo?: string
+  destacado?: boolean
+  tipo?: string
+  avaliacao?: number
+  descricao?: string
+  capa?: string
+  cardapio?: [
+    {
+      foto: string
+      preco: number
+      id: number
+      nome: string
+      descricao: string
+      porcao: string
+    }
+  ]
 }
 
 const Perfil = () => {
   const { id } = useParams()
-  const [Restaurante, setRestaurante] = useState<Restaurante[]>([])
+  const [Restaurante, setRestaurante] = useState<Restaurante>()
 
   useEffect(() => {
     fetch(`https://fake-api-tau.vercel.app/api/efood/restaurantes/${id}`)
@@ -34,12 +36,13 @@ const Perfil = () => {
       .then((res) => setRestaurante(res))
   }, [id])
 
+  const Cardapio = Restaurante?.cardapio
   return (
     <>
       <Header />
       <Apresentacao />
       <Container>
-        <ListaDeProdutos restaurante={Restaurante} />
+        <ListaDeProdutos cardapio={Cardapio} />
       </Container>
       <Footer />
     </>

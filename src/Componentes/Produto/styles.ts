@@ -8,6 +8,8 @@ export const Card = styled.div`
 
   img {
     width: 100%;
+    object-fit: cover;
+    height: 168px;
   }
 `
 
@@ -21,14 +23,7 @@ export const Descricao = styled.p`
   font-size: 14px;
   line-height: 22px;
   font-weight: 400;
-  margin: 8px;
-`
-
-export const Container = styled.div`
-  diplay: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  padding: 16px 8px;
 `
 
 export const Botão = styled.button`
