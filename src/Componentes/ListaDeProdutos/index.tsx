@@ -8,13 +8,15 @@ type Props = {
 
 const ListaDeProdutos = ({ cardapio }: Props) => {
   return (
-    <Container>
-      {cardapio?.map((cardapio) => (
-        <Lista key={cardapio.id}>
-          <Produto cardapio={cardapio} />
-        </Lista>
-      ))}
-    </Container>
+    <>
+      <Container>
+        {cardapio?.map((cardapio) => (
+          <Lista key={cardapio.id}>
+            <Produto cardapio={cardapio} />
+          </Lista>
+        ))}
+      </Container>
+    </>
   )
 }
 export default ListaDeProdutos
