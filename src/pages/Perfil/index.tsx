@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Apresentacao from '../../Componentes/Apresentacao'
 import Footer from '../../Componentes/Footer'
@@ -6,7 +5,11 @@ import Header from '../../Componentes/Header'
 import ListaDeProdutos from '../../Componentes/ListaDeProdutos'
 import { Container } from './styles'
 
+import { useGetCardapiosDeRestaurantesQuery } from '../../services/api'
+import Cart from '../../Componentes/Cart'
+
 export type Restaurante = {
+  foto: string
   id?: number
   titulo?: string
   destacado?: boolean
@@ -14,7 +17,7 @@ export type Restaurante = {
   avaliacao?: number
   descricao?: string
   capa?: string
-  cardapio?: [
+  cardapio: [
     {
       foto: string
       preco: number
@@ -28,24 +31,22 @@ export type Restaurante = {
 
 const Perfil = () => {
   const { id } = useParams()
-  const [Restaurante, setRestaurante] = useState<Restaurante>()
+  const { data: Restaurante } = useGetCardapiosDeRestaurantesQuery(id!)
 
-  useEffect(() => {
-    fetch(`https://fake-api-tau.vercel.app/api/efood/restaurantes/${id}`)
-      .then((res) => res.json())
-      .then((res) => setRestaurante(res))
-  }, [id])
-
-  const Cardapio = Restaurante?.cardapio
-  return (
-    <>
-      <Header />
-      <Apresentacao />
-      <Container>
-        <ListaDeProdutos cardapio={Cardapio} />
-      </Container>
-      <Footer />
-    </>
-  )
+  if (Restaurante && Restaurante.cardapio) {
+    return (
+      <>
+        <Cart />
+        <Header />
+        <Apresentacao />
+        <Container>
+          <ListaDeProdutos cardapio={Restaurante.cardapio} />
+        </Container>
+        <Footer />
+      </>
+    )
+  }
+  return <h4>Pagina carregando...</h4>
 }
+
 export default Perfil
