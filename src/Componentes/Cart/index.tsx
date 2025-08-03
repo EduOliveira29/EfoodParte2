@@ -1,5 +1,4 @@
 import iconExcluir from '../../Assets/images/iconExcluir.png'
-import pizza from '../../Assets/images/pizza.png'
 import { Botão } from '../../styles'
 import {
   CartContainer,
@@ -15,45 +14,53 @@ import {
 } from './styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '../../store'
-import { fechar } from '../../store/reducers/cart'
+import { fechar, remove } from '../../store/reducers/cart'
+import { formataPreço } from '../Produto'
 
 const Cart = () => {
-  const { estaAberto } = useSelector((state: RootReducer) => state.cart)
+  const { estaAberto, items } = useSelector((state: RootReducer) => state.cart)
 
   const dispatch = useDispatch()
 
   const fecharCart = () => {
     dispatch(fechar())
   }
+
+  const removerDoCart = (id: number) => {
+    dispatch(remove(id))
+  }
+
+  const PrecoTotal = () => {
+    return items.reduce((acumulador, valorAtual) => {
+      return (acumulador += valorAtual.preco)
+    }, 0)
+  }
+
   return (
     <>
       <CartContainer className={estaAberto ? 'is-open' : ''}>
         <Overlay onClick={fecharCart} />
         <SideBar>
           <CartLista>
-            <CartItem>
-              <img src={pizza} alt="" />
-              <InfosItem>
-                <Titulo>Pizza Marguerita</Titulo>
-                <Preco>R$ 60,90</Preco>
-              </InfosItem>
-              <ImgIcon>
-                <img src={iconExcluir} alt="" />
-              </ImgIcon>
-            </CartItem>
-            <CartItem>
-              <img src={pizza} alt="" />
-              <InfosItem>
-                <Titulo>Pizza Marguerita</Titulo>
-                <Preco>R$ 60,90</Preco>
-              </InfosItem>
-              <ImgIcon>
-                <img src={iconExcluir} alt="" />
-              </ImgIcon>
-            </CartItem>
+            {items.map((item) => (
+              <CartItem key={item.id}>
+                <img src={item.foto} alt="" />
+                <InfosItem>
+                  <Titulo>{item.nome}</Titulo>
+                  <Preco>{formataPreço(item.preco)}</Preco>
+                </InfosItem>
+                <ImgIcon>
+                  <img
+                    onClick={() => removerDoCart(item.id)}
+                    src={iconExcluir}
+                    alt=""
+                  />
+                </ImgIcon>
+              </CartItem>
+            ))}
           </CartLista>
           <ValorFinal>
-            <p>Valor total</p> <span>R$ 182,70</span>
+            <p>Valor total</p> <span>R$ {formataPreço(PrecoTotal())}</span>
           </ValorFinal>
           <Botão>Continuar com a entrega</Botão>
         </SideBar>

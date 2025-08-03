@@ -11,7 +11,14 @@ import {
   BotãoModal
 } from './styles'
 import { useDispatch } from 'react-redux'
-import { add } from '../../store/reducers/cart'
+import { abrir, add } from '../../store/reducers/cart'
+
+export const formataPreço = (preco = 0) => {
+  return new Intl.NumberFormat('pt-br', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(preco)
+}
 
 type Props = {
   cardapio: {
@@ -28,19 +35,18 @@ const Produto = ({ cardapio }: Props) => {
   const [modalEstaAberto, setModalEstaAberto] = useState(false)
 
   const dispatch = useDispatch()
-  const Cardapio = [
-    {
-      foto: cardapio.foto,
-      preco: cardapio.preco,
-      id: cardapio.id,
-      nome: cardapio.nome,
-      descricao: cardapio.descricao,
-      porcao: cardapio.porcao
-    }
-  ]
+  const Item = {
+    foto: cardapio.foto,
+    preco: cardapio.preco,
+    id: cardapio.id,
+    nome: cardapio.nome,
+    descricao: cardapio.descricao,
+    porcao: cardapio.porcao
+  }
 
   const addToCart = () => {
-    dispatch(add(Cardapio))
+    dispatch(add(Item))
+    dispatch(abrir())
   }
 
   return (
@@ -59,7 +65,7 @@ const Produto = ({ cardapio }: Props) => {
             <Texto>{cardapio.descricao}</Texto>
             <Texto>Serve de: {cardapio.porcao}</Texto>
             <BotãoModal onClick={addToCart}>
-              Adicionar ao carrinho - R$ {cardapio.preco}
+              Adicionar ao carrinho - {formataPreço(cardapio.preco)}
             </BotãoModal>
           </div>
         </ModalContainer>
