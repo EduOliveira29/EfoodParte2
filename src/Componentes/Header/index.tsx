@@ -1,6 +1,6 @@
 import backgrund from '../../Assets/images/Fundo.svg'
 import logo from '../../Assets/images/logo.svg'
-import { Container, Imagem } from './styles'
+import { BotãoLink, Container, Imagem } from './styles'
 
 import { abrir } from '../../store/reducers/cart'
 import { useDispatch, useSelector } from 'react-redux'
@@ -17,7 +17,9 @@ const Header = () => {
   return (
     <Imagem style={{ backgroundImage: `url(${backgrund})` }}>
       <Container>
-        <h2>Restaurantes</h2>
+        <BotãoLink type="link" to={`/`}>
+          Restaurantes
+        </BotãoLink>
         <img src={logo} alt="" />
         <a onClick={openCart}>{items.length} produto(s) no carrinho</a>
       </Container>
