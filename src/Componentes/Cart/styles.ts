@@ -69,6 +69,7 @@ export const Titulo = styled.h3`
   color: ${Cores.corSecundaria};
   font-size: 18px;
   line-height: 100%;
+  padding-bottom: 16px;
 `
 
 export const Preco = styled.p`
@@ -95,4 +96,5 @@ export const ValorFinal = styled.div`
   Line height: 100%;
   font-size: 14px;
   font-weight: bold;
+  color: ${Cores.corPrincipal}
 `

@@ -60,7 +60,7 @@ const Cart = () => {
             ))}
           </CartLista>
           <ValorFinal>
-            <p>Valor total</p> <span>R$ {formataPreço(PrecoTotal())}</span>
+            <p>Valor total</p> <span>{formataPreço(PrecoTotal())}</span>
           </ValorFinal>
           <Botão>Continuar com a entrega</Botão>
         </SideBar>

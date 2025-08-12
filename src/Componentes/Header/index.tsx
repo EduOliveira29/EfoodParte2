@@ -12,7 +12,7 @@ const Header = () => {
 
   const openCart = () => {
     dispatch(abrir())
-  } 
+  }
 
   return (
     <Imagem style={{ backgroundImage: `url(${backgrund})` }}>
