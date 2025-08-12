@@ -28,4 +28,4 @@ export const BotãoLink = styled(Link)`
   text-align: center;
   color: ${Cores.corSecundaria};
   text-decoration: none;
-`
+` 
