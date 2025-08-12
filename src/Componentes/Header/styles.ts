@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { Cores } from '../../styles'
+import { Link } forma 'react-router-dom'
 
 export const Container = styled.div`
   max-width: 1024px;
@@ -18,4 +19,13 @@ export const Imagem = styled.div`
   font-weight: bold;
   background-size: cover;
   color: ${Cores.corSecundaria};
+`
+
+export const BotãoLink = styled(Link)`
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 100%;
+  text-align: center;
+  color: ${Cores.corSecundaria};
+  text-decoration: none;
 `
