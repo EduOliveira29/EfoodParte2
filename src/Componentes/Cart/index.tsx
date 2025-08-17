@@ -1,5 +1,4 @@
 import iconExcluir from '../../Assets/images/iconExcluir.png'
-import { Botão } from '../../styles'
 import {
   CartContainer,
   Overlay,
@@ -16,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '../../store'
 import { fechar, remove } from '../../store/reducers/cart'
 import { formataPreço } from '../Produto'
+import { BotãoLink } from '../../styles'
 
 const Cart = () => {
   const { estaAberto, items } = useSelector((state: RootReducer) => state.cart)
@@ -37,35 +37,35 @@ const Cart = () => {
   }
 
   return (
-    <>
-      <CartContainer className={estaAberto ? 'is-open' : ''}>
-        <Overlay onClick={fecharCart} />
-        <SideBar>
-          <CartLista>
-            {items.map((item) => (
-              <CartItem key={item.id}>
-                <img src={item.foto} alt="" />
-                <InfosItem>
-                  <Titulo>{item.nome}</Titulo>
-                  <Preco>{formataPreço(item.preco)}</Preco>
-                </InfosItem>
-                <ImgIcon>
-                  <img
-                    onClick={() => removerDoCart(item.id)}
-                    src={iconExcluir}
-                    alt=""
-                  />
-                </ImgIcon>
-              </CartItem>
-            ))}
-          </CartLista>
-          <ValorFinal>
-            <p>Valor total</p> <span>{formataPreço(PrecoTotal())}</span>
-          </ValorFinal>
-          <Botão>Continuar com a entrega</Botão>
-        </SideBar>
-      </CartContainer>
-    </>
+    <CartContainer className={estaAberto ? 'is-open' : ''}>
+      <Overlay onClick={fecharCart} />
+      <SideBar>
+        <CartLista>
+          {items.map((item) => (
+            <CartItem key={item.id}>
+              <img src={item.foto} alt="" />
+              <InfosItem>
+                <Titulo>{item.nome}</Titulo>
+                <Preco>{formataPreço(item.preco)}</Preco>
+              </InfosItem>
+              <ImgIcon>
+                <img
+                  onClick={() => removerDoCart(item.id)}
+                  src={iconExcluir}
+                  alt=""
+                />
+              </ImgIcon>
+            </CartItem>
+          ))}
+        </CartLista>
+        <ValorFinal>
+          <p>Valor total</p> <span>{formataPreço(PrecoTotal())}</span>
+        </ValorFinal>
+        <BotãoLink type="submit" to={`/Entrega`}>
+          Continuar com a entrega
+        </BotãoLink>
+      </SideBar>
+    </CartContainer>
   )
 }
 export default Cart

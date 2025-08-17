@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { createGlobalStyle, styled } from 'styled-components'
 
 export const Cores = {
@@ -30,6 +31,20 @@ export const Botão = styled.button`
   margin: 8px;
   padding: 8px;
   border: none;
+`
+
+export const BotãoLink = styled(Link)`
+  display: block;
+  width: 95%;
+  background-color: ${Cores.corPrincipal};
+  color: ${Cores.corSecundaria};
+  Line height: 100%;
+  font-size: 14px;
+  padding: 8px;
+  margin: 8px;
+  border: none;
+  text-decoration: none;
+  text-align: center;
 `
 
 export const BotãoTag = styled(Botão)`

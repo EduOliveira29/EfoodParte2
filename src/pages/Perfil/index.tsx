@@ -31,7 +31,6 @@ export type Restaurante = {
 
 const Perfil = () => {
   const { id } = useParams()
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const { data: Restaurante } = useGetCardapiosDeRestaurantesQuery(id!)
 
   if (Restaurante && Restaurante.cardapio) {

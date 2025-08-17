@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Botão, Cores } from '../../styles'
+import { Cores } from '../../styles'
 
 export const CartContainer = styled.div`
   position: fixed;
@@ -12,15 +12,6 @@ export const CartContainer = styled.div`
 
   &.is-open {
     display: flex;
-  }
-
-  ${Botão} {
-    width: 95%;
-    background-color: ${Cores.corPrincipal};
-    color: ${Cores.corSecundaria};
-    Line height: 100%;
-    font-size: 14px;
-    font-weight: bold;
   }
 `
 

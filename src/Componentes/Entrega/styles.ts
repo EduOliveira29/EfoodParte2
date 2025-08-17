@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Botão, Cores } from '../../styles'
+import { Cores } from '../../styles'
 
 export const Container = styled.div`
   position: absolute;
@@ -8,15 +8,6 @@ export const Container = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
-
-  ${Botão} {
-    width: 95%;
-    background-color: ${Cores.corPrincipal};
-    color: ${Cores.corSecundaria};
-    Line height: 100%;
-    font-size: 14px;
-    font-weight: bold;
-  }
 `
 
 export const SideBar = styled.aside`
@@ -32,6 +23,7 @@ export const Titulo = styled.h2`
   line-height: 100%;
   font-weight: bold;
   margin: 32px 0 16px 8px;
+  color: ${Cores.corPrincipal};
 `
 
 export const Row = styled.div`
