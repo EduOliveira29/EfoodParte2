@@ -46,7 +46,19 @@ const Pagamento = () => {
         .required('O campo é obrigatório')
     }),
     onSubmit: (values) => {
-      console.log(values)
+      comprar({
+        pagamento: {
+          cartao: {
+            nomeCartao: values.nomeCartao,
+            numeroCartao: values.numeroCartao,
+            cvv: values.cvv,
+            vencimento: {
+              ano: values.anovencimento,
+              mes: values.mesvencimento
+            }
+          }
+        }
+      })
     }
   })
 
