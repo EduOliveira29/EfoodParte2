@@ -6,33 +6,30 @@ type Produto = {
   price: 0
 }
 
-type entrega = {
-  nomeCompleto: string
-  endereco: {
-    descricao?: string
-    cidade?: string
-    Cep: string
-    numero: number
-    completemnto?: string
-  }
-}
-
-type pagamento = {
-  cartao: {
-    nomeCartao: string
-    numeroCartao: string
-    cvv: number
-    vencimento: {
-      mes: number
-      ano: number
-    }
-  }
-}
-
 type ComprarCartao = {
   produto: Produto[]
-  entrega: entrega
-  pagamento: pagamento
+  entrega: {
+    nomeCompleto: string
+    endereco: {
+      descricao?: string
+      cidade?: string
+      Cep: string
+      numero: number
+      completemnto?: string
+    }
+  }
+
+  pagamento: {
+    cartao: {
+      nomeCartao: string
+      numeroCartao: string
+      cvv: number
+      vencimento: {
+        mes: number
+        ano: number
+      }
+    }
+  }
 }
 
 const api = createApi({
@@ -48,7 +45,7 @@ const api = createApi({
     }),
     comprar: builder.mutation<any, ComprarCartao>({
       query: (body) => ({
-        url: 'Perfil/:id',
+        url: 'checkout',
         method: 'POST',
         body
       })

@@ -1,19 +1,15 @@
 import { useSelector } from 'react-redux'
 import { formataPreço } from '../Produto'
 import { RootReducer } from '../../store'
-import {
-  Container,
-  NomeCartao,
-  SideBar,
-  NumeroCartao,
-  Vencimento
-} from './styles'
+import { Container, SideBar, NumeroCartao, Vencimento } from './styles'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useComprarMutation } from '../../services/api'
-import { BotãoLink } from '../../styles'
+import { Botão, BotãoLink } from '../../styles'
+import { useNavigate } from 'react-router-dom'
 
 const Pagamento = () => {
+  const navigate = useNavigate()
   const { items } = useSelector((state: RootReducer) => state.cart)
   const PrecoTotal = () => {
     return items.reduce((acumulador, valorAtual) => {
@@ -28,8 +24,8 @@ const Pagamento = () => {
       nomeCartao: '',
       numeroCartao: '',
       cvv: 0,
-      Mesvencimento: 0,
-      Anovencimento: 0
+      mesvencimento: 0,
+      anovencimento: 0
     },
     validationSchema: Yup.object({
       nomeCartao: Yup.string()
@@ -38,31 +34,27 @@ const Pagamento = () => {
       numeroCartao: Yup.string()
         .min(8, 'o campo deve ter 8 digitos')
         .required('O campo é obrigatório'),
-      cvv: Yup.string().min(3, 'o campo deve conter 3 digitos'),
-      Mesvencimento: Yup.string()
-        .min(2, 'o campo deve conter 2 digitos')
-        .max(2, 'o campo deve conter 2 digitos'),
-      Anovencimento: Yup.string()
-        .min(2, 'o campo deve conter 2 digitos')
-        .max(2, 'o campo deve conter 2 digitos')
+      cvv: Yup.string()
+        .min(3, 'o campo deve conter 3 digitos')
+        .max(3, 'o campo deve ter 4 digitos')
+        .required('O campo é obrigatório'),
+      anovencimento: Yup.number()
+        .min(4, 'o campo deve ter 4 digitos')
+        .required('O campo é obrigatório'),
+      mesvencimento: Yup.number()
+        .max(2, 'o campo deve ter 2 digitos')
+        .required('O campo é obrigatório')
     }),
     onSubmit: (values) => {
-      comprar({
-        pagamento: {
-          cartao: {
-            nomeCartao: values.nomeCartao,
-            numeroCartao: values.numeroCartao,
-            cvv: values.cvv,
-            vencimento: {
-              ano: values.Anovencimento,
-              mes: values.Mesvencimento
-            }
-          }
-        }
-      })
-      console.log(comprar)
+      console.log(values)
     }
   })
+
+  const irParaPagamento = () => {
+    if (formPagamento.isValid) {
+      navigate('/Finalizacao')
+    }
+  }
 
   const getErrorMessage = (fieldName: string, message?: string) => {
     const estaAlterado = fieldName in formPagamento.touched
@@ -78,7 +70,7 @@ const Pagamento = () => {
         <form onSubmit={formPagamento.handleSubmit}>
           <h2>Pagamento - Valor a pagar {formataPreço(PrecoTotal())}</h2>
           <div>
-            <NomeCartao>
+            <div>
               <label htmlFor="nomeCartao">Nome no cartão</label>
               <input
                 id="nomeCartao"
@@ -91,7 +83,7 @@ const Pagamento = () => {
               <small>
                 {getErrorMessage('nomeCartao', formPagamento.errors.nomeCartao)}
               </small>
-            </NomeCartao>
+            </div>
             <NumeroCartao>
               <div>
                 <label htmlFor="numeroCartao">Número do cartão</label>
@@ -129,45 +121,45 @@ const Pagamento = () => {
             </NumeroCartao>
             <Vencimento>
               <div>
-                <label htmlFor="Mesvencimento">Mês de vencimento</label>
+                <label htmlFor="mesvencimento">Mês de vencimento</label>
                 <input
-                  id="Mesvencimento"
+                  id="mesvencimento"
                   type="number"
-                  name="Mesvenciomento"
-                  value={formPagamento.values.Mesvencimento}
+                  name="mesvencimento"
+                  value={formPagamento.values.mesvencimento}
                   onChange={formPagamento.handleChange}
                   onBlur={formPagamento.handleBlur}
                 />
                 <small>
                   {getErrorMessage(
-                    'Mesvencimento',
-                    formPagamento.errors.Mesvencimento
+                    'mesvencimento',
+                    formPagamento.errors.mesvencimento
                   )}
                 </small>
               </div>
               <div>
-                <label htmlFor="Anovencimento">Ano de vencimento</label>
+                <label htmlFor="anovencimento">Ano de vencimento</label>
                 <input
-                  id="Anovencimento"
+                  id="anovencimento"
                   type="number"
-                  name="Anovencimento"
-                  value={formPagamento.values.Anovencimento}
+                  name="anovencimento"
+                  value={formPagamento.values.anovencimento}
                   onChange={formPagamento.handleChange}
                   onBlur={formPagamento.handleBlur}
                 />
                 <small>
                   {getErrorMessage(
-                    'Anovencimento',
-                    formPagamento.errors.Anovencimento
+                    'anovencimento',
+                    formPagamento.errors.anovencimento
                   )}
                 </small>
               </div>
             </Vencimento>
           </div>
           <div className="botoes">
-            <BotãoLink type="submit" to={`/Finalizacao`}>
-              Finalizar pagamento
-            </BotãoLink>
+            <Botão type="submit" onClick={irParaPagamento}>
+              Continuar com a entrega
+            </Botão>
             <BotãoLink type="link" to={`/Entrega`}>
               Voltar para a edição de endereço
             </BotãoLink>

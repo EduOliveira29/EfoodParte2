@@ -1,12 +1,7 @@
 import { Botão } from '../../styles'
 import { Container, SideBar, Texto } from './styles'
-import { useComprarMutation } from '../../services/api'
 
 const Finalizacao = () => {
-  const [comprar] = useComprarMutation()
-
-  console.log(comprar)
-
   return (
     <Container>
       <SideBar>

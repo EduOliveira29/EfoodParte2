@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Cores } from '../../styles'
+import { Botão, Cores } from '../../styles'
 
 export const Container = styled.div`
   position: absolute;
@@ -8,6 +8,28 @@ export const Container = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
+
+  ${Botão} {
+    width: 95%;
+    background-color: ${Cores.corPrincipal};
+    color: ${Cores.corSecundaria};
+  }
+
+  label {
+    margin: 8px;
+    font-size: 14px;
+    line-height: 100%;
+    height: 16px;
+  }
+
+  input {
+    width: 95%;
+    margin: 8px;
+    font-size: 14px;
+    line-height: 100%;
+    background-color: ${Cores.corPrincipal};
+    height: 32px;
+  }
 `
 
 export const SideBar = styled.aside`
@@ -26,56 +48,9 @@ export const Titulo = styled.h2`
   color: ${Cores.corPrincipal};
 `
 
-export const Row = styled.div`
-  display: block;
-`
-
-export const GrupoInput = styled.div`
-  label {
-    padding: 8px;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 100%;
-    height: 16px;
-  }
-
-  input {
-    width: 95%;
-    margin: 8px;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 100%;
-    background-color: ${Cores.corPrincipal};
-    height: 32px;
-  }
-`
-
-export const GrupoInputNumerico = styled.div`
+export const CepENumero = styled.div`
   display: flex;
-
-  div {
-    display: flex;
-    flex-direction: column;
-  }
-
-  label {
-    padding: 8px;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 100%;
-    height: 16px;
-    color: ${Cores.corPrincipal};
-  }
-
-  input {
-    width: 156px;
-    height: 32px;
-    margin: 8px;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 100%;
-    background-color: ${Cores.corPrincipal};
-  }
+  width: 95%;
 `
 
 export const Botoes = styled.div`

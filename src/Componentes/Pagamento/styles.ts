@@ -19,8 +19,6 @@ export const Container = styled.div`
   }
 
   h2 {
-    font-weight: 700;
-    font-style: Bold;
     font-size: 16px;
     line-height: 100%;
     margin: 32px 0 16px 8px;
@@ -37,9 +35,10 @@ export const Container = styled.div`
   }
 
   input {
+    width: 95%;
     margin: 8px;
     height: 32px;
-    background-color: ${Cores.corDeFundo};
+    background-color: ${Cores.corPrincipal};
     font-weight: 700;
     font-size: 14px;
     line-height: 100%;
@@ -58,34 +57,19 @@ export const SideBar = styled.aside`
   width: 100%;
 `
 
-export const NomeCartao = styled.div`
-  input {
-    width: 95%;
-  }
-`
 export const NumeroCartao = styled.div`
   display: flex;
-  flex: auto;
-
-  div {
-    display: flex;
-    flex-direction: column;
-  }
 
   .numeroCartao {
-    width: 228px;
+    width: 232;
   }
 
   .cvv {
-    width: 88px;
+    width: 112px;
   }
 `
 
 export const Vencimento = styled.div`
   display: flex;
-  flex: auto;
-
-  div {
-    flex-direction: column;
-  }
+  width: 95%;
 `

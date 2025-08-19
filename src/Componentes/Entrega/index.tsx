@@ -1,25 +1,19 @@
 import { useFormik } from 'formik'
-import {
-  Container,
-  SideBar,
-  Titulo,
-  Row,
-  GrupoInput,
-  GrupoInputNumerico,
-  Botoes
-} from './styles'
+import { Container, SideBar, Titulo, Botoes, CepENumero } from './styles'
 import * as Yup from 'yup'
-import { BotãoLink } from '../../styles'
+import { Botão, BotãoLink } from '../../styles'
 import { useComprarMutation } from '../../services/api'
+import { useNavigate } from 'react-router-dom'
 
 const Entrega = () => {
   const [comprar] = useComprarMutation()
+  const navigate = useNavigate()
 
   const formEntrega = useFormik({
     initialValues: {
       nomeCompleto: '',
       CEP: '',
-      Numero: 0,
+      numero: 0,
       endereco: '',
       cidade: ''
     },
@@ -31,9 +25,15 @@ const Entrega = () => {
         .min(8, 'o campo deve ter 8 digitos')
         .max(8, 'o campo deve ter 8 digitos')
         .required('O campo é obrigatório'),
-      Numero: Yup.string().min(1, 'o campo deve conter o número para entrega'),
-      cidade: Yup.string().min(8, 'o campo deve estar preencido'),
-      endereco: Yup.string().min(4, 'o campo deve estar preencido')
+      numero: Yup.string()
+        .min(1, 'o campo deve conter o número para entrega')
+        .required('O campo é obrigatório'),
+      cidade: Yup.string()
+        .min(8, 'o campo deve estar preencido')
+        .required('O campo é obrigatório'),
+      endereco: Yup.string()
+        .min(4, 'o campo deve estar preencido')
+        .required('O campo é obrigatório')
     }),
     onSubmit: (values) => {
       comprar({
@@ -41,13 +41,20 @@ const Entrega = () => {
           nomeCompleto: values.nomeCompleto,
           endereco: {
             Cep: values.CEP,
-            numero: values.Numero
+            numero: values.numero,
+            cidade: values.cidade,
+            descricao: values.endereco
           }
         }
       })
-      console.log(comprar)
     }
   })
+
+  const irParaPagamento = () => {
+    if (formEntrega.isValid) {
+      navigate('/Pagamento')
+    }
+  }
 
   const getErrorMessage = (fieldName: string, message?: string) => {
     const estaAlterado = fieldName in formEntrega.touched
@@ -62,8 +69,8 @@ const Entrega = () => {
       <SideBar>
         <form onSubmit={formEntrega.handleSubmit}>
           <Titulo>Entrega</Titulo>
-          <Row>
-            <GrupoInput>
+          <div>
+            <div>
               <label htmlFor="nomeCompleto">Quem irá receber</label>
               <input
                 id="nomeCompleto"
@@ -79,8 +86,8 @@ const Entrega = () => {
                   formEntrega.errors.nomeCompleto
                 )}
               </small>
-            </GrupoInput>
-            <GrupoInput>
+            </div>
+            <div>
               <label htmlFor="endereco">Endereço</label>
               <input
                 id="endereco"
@@ -90,8 +97,8 @@ const Entrega = () => {
                 onChange={formEntrega.handleChange}
                 onBlur={formEntrega.handleBlur}
               />
-            </GrupoInput>
-            <GrupoInput>
+            </div>
+            <div>
               <label htmlFor="cidade">Cidade</label>
               <input
                 id="cidade"
@@ -101,8 +108,8 @@ const Entrega = () => {
                 onChange={formEntrega.handleChange}
                 onBlur={formEntrega.handleBlur}
               />
-            </GrupoInput>
-            <GrupoInputNumerico>
+            </div>
+            <CepENumero>
               <div>
                 <label htmlFor="CEP">CEP</label>
                 <input
@@ -116,29 +123,29 @@ const Entrega = () => {
                 <small>{getErrorMessage('CEP', formEntrega.errors.CEP)}</small>
               </div>
               <div>
-                <label htmlFor="Numero">Número</label>
+                <label htmlFor="numero">Número</label>
                 <input
-                  id="Numero"
+                  id="numero"
                   type="text"
-                  name="Numero"
-                  value={formEntrega.values.Numero}
+                  name="numero"
+                  value={formEntrega.values.numero}
                   onChange={formEntrega.handleChange}
                   onBlur={formEntrega.handleBlur}
                 />
                 <small>
-                  {getErrorMessage('Numero', formEntrega.errors.Numero)}
+                  {getErrorMessage('numero', formEntrega.errors.numero)}
                 </small>
               </div>
-            </GrupoInputNumerico>
-            <GrupoInput>
+            </CepENumero>
+            <div>
               <label htmlFor="">Complemento (opcional)</label>
               <input type="text" />
-            </GrupoInput>
-          </Row>
+            </div>
+          </div>
           <Botoes>
-            <BotãoLink type="submit" to={`/Pagamento`}>
+            <Botão type="submit" onClick={irParaPagamento}>
               Continuar com a entrega
-            </BotãoLink>
+            </Botão>
             <BotãoLink type="link" to={`/`}>
               Voltar para o carrinho
             </BotãoLink>

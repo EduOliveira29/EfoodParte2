@@ -15,10 +15,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '../../store'
 import { fechar, remove } from '../../store/reducers/cart'
 import { formataPreço } from '../Produto'
-import { BotãoLink } from '../../styles'
+import { Botão } from '../../styles'
+import { useNavigate } from 'react-router-dom'
 
 const Cart = () => {
   const { estaAberto, items } = useSelector((state: RootReducer) => state.cart)
+  const navigate = useNavigate()
 
   const dispatch = useDispatch()
 
@@ -34,6 +36,12 @@ const Cart = () => {
     return items.reduce((acumulador, valorAtual) => {
       return (acumulador += valorAtual.preco)
     }, 0)
+  }
+
+  const irParaEntrega = () => {
+    if (items.length >= 1) {
+      navigate('/Entrega')
+    }
   }
 
   return (
@@ -61,9 +69,7 @@ const Cart = () => {
         <ValorFinal>
           <p>Valor total</p> <span>{formataPreço(PrecoTotal())}</span>
         </ValorFinal>
-        <BotãoLink type="submit" to={`/Entrega`}>
-          Continuar com a entrega
-        </BotãoLink>
+        <Botão onClick={irParaEntrega}>Continuar com a entrega</Botão>
       </SideBar>
     </CartContainer>
   )
