@@ -2,23 +2,22 @@ import { useFormik } from 'formik'
 import { Container, SideBar, Titulo, Botoes, CepENumero } from './styles'
 import * as Yup from 'yup'
 import { Botão, BotãoLink } from '../../styles'
-import { useComprarMutation } from '../../services/api'
 import { useNavigate } from 'react-router-dom'
+import { adicionar } from '../../store/reducers/form'
 
 const Entrega = () => {
-  const [comprar] = useComprarMutation()
   const navigate = useNavigate()
 
-  const formEntrega = useFormik({
+  const form = useFormik({
     initialValues: {
-      nomeCompleto: '',
+      receiver: '',
       CEP: '',
       numero: 0,
       endereco: '',
       cidade: ''
     },
     validationSchema: Yup.object({
-      nomeCompleto: Yup.string()
+      receiver: Yup.string()
         .min(8, 'O nome deve apresentar pelo menos 8 caracteres')
         .required('O campo é obrigatório'),
       CEP: Yup.string()
@@ -36,14 +35,14 @@ const Entrega = () => {
         .required('O campo é obrigatório')
     }),
     onSubmit: (values) => {
-      comprar({
-        entrega: {
-          nomeCompleto: values.nomeCompleto,
-          endereco: {
-            Cep: values.CEP,
-            numero: values.numero,
-            cidade: values.cidade,
-            descricao: values.endereco
+      adicionar({
+        delivery: {
+          receiver: values.receiver,
+          address: {
+            description: values.endereco,
+            city: values.cidade,
+            zipCode: '',
+            number: values.numero
           }
         }
       })
@@ -51,108 +50,105 @@ const Entrega = () => {
   })
 
   const irParaPagamento = () => {
-    if (formEntrega.isValid) {
+    if (form.isValid) {
       navigate('/Pagamento')
     }
   }
 
   const getErrorMessage = (fieldName: string, message?: string) => {
-    const estaAlterado = fieldName in formEntrega.touched
-    const estaInvalido = fieldName in formEntrega.errors
+    const estaAlterado = fieldName in form.touched
+    const estaInvalido = fieldName in form.errors
 
     if (estaAlterado && estaInvalido) return message
     return ''
   }
 
   return (
-    <Container>
-      <SideBar>
-        <form onSubmit={formEntrega.handleSubmit}>
-          <Titulo>Entrega</Titulo>
-          <div>
+    <>
+      <Container>
+        <SideBar>
+          <form onSubmit={form.handleSubmit}>
+            <Titulo>Entrega</Titulo>
             <div>
-              <label htmlFor="nomeCompleto">Quem irá receber</label>
-              <input
-                id="nomeCompleto"
-                type="text"
-                name="nomeCompleto"
-                value={formEntrega.values.nomeCompleto}
-                onChange={formEntrega.handleChange}
-                onBlur={formEntrega.handleBlur}
-              />
-              <small>
-                {getErrorMessage(
-                  'nomeCompleto',
-                  formEntrega.errors.nomeCompleto
-                )}
-              </small>
-            </div>
-            <div>
-              <label htmlFor="endereco">Endereço</label>
-              <input
-                id="endereco"
-                type="text"
-                name="endereco"
-                value={formEntrega.values.endereco}
-                onChange={formEntrega.handleChange}
-                onBlur={formEntrega.handleBlur}
-              />
-            </div>
-            <div>
-              <label htmlFor="cidade">Cidade</label>
-              <input
-                id="cidade"
-                type="text"
-                name="cidade"
-                value={formEntrega.values.cidade}
-                onChange={formEntrega.handleChange}
-                onBlur={formEntrega.handleBlur}
-              />
-            </div>
-            <CepENumero>
               <div>
-                <label htmlFor="CEP">CEP</label>
+                <label htmlFor="receiver">Quem irá receber</label>
                 <input
-                  id="CEP"
+                  id="receiver"
                   type="text"
-                  name="CEP"
-                  value={formEntrega.values.CEP}
-                  onChange={formEntrega.handleChange}
-                  onBlur={formEntrega.handleBlur}
-                />
-                <small>{getErrorMessage('CEP', formEntrega.errors.CEP)}</small>
-              </div>
-              <div>
-                <label htmlFor="numero">Número</label>
-                <input
-                  id="numero"
-                  type="text"
-                  name="numero"
-                  value={formEntrega.values.numero}
-                  onChange={formEntrega.handleChange}
-                  onBlur={formEntrega.handleBlur}
+                  name="receiver"
+                  value={form.values.receiver}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
                 />
                 <small>
-                  {getErrorMessage('numero', formEntrega.errors.numero)}
+                  {getErrorMessage('receiver', form.errors.receiver)}
                 </small>
               </div>
-            </CepENumero>
-            <div>
-              <label htmlFor="">Complemento (opcional)</label>
-              <input type="text" />
+              <div>
+                <label htmlFor="endereco">Endereço</label>
+                <input
+                  id="endereco"
+                  type="text"
+                  name="endereco"
+                  value={form.values.endereco}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                />
+              </div>
+              <div>
+                <label htmlFor="cidade">Cidade</label>
+                <input
+                  id="cidade"
+                  type="text"
+                  name="cidade"
+                  value={form.values.cidade}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                />
+              </div>
+              <CepENumero>
+                <div>
+                  <label htmlFor="CEP">CEP</label>
+                  <input
+                    id="CEP"
+                    type="text"
+                    name="CEP"
+                    value={form.values.CEP}
+                    onChange={form.handleChange}
+                    onBlur={form.handleBlur}
+                  />
+                  <small>{getErrorMessage('CEP', form.errors.CEP)}</small>
+                </div>
+                <div>
+                  <label htmlFor="numero">Número</label>
+                  <input
+                    id="numero"
+                    type="text"
+                    name="numero"
+                    value={form.values.numero}
+                    onChange={form.handleChange}
+                    onBlur={form.handleBlur}
+                  />
+                  <small>{getErrorMessage('numero', form.errors.numero)}</small>
+                </div>
+              </CepENumero>
+              <div>
+                <label htmlFor="">Complemento (opcional)</label>
+                <input type="text" />
+              </div>
             </div>
-          </div>
-          <Botoes>
-            <Botão type="submit" onClick={irParaPagamento}>
-              Continuar com a entrega
-            </Botão>
-            <BotãoLink type="link" to={`/`}>
-              Voltar para o carrinho
-            </BotãoLink>
-          </Botoes>
-        </form>
-      </SideBar>
-    </Container>
+            <Botoes>
+              <Botão type="submit" onClick={irParaPagamento}>
+                Continuar com a entrega
+              </Botão>
+              <BotãoLink type="link" to={`/`}>
+                Voltar para o carrinho
+              </BotãoLink>
+            </Botoes>
+          </form>
+        </SideBar>
+      </Container>
+    </>
   )
 }
 

@@ -56,3 +56,19 @@ export const CepENumero = styled.div`
 export const Botoes = styled.div`
   margin-top: 24px;
 `
+export const NumeroCartao = styled.div`
+  display: flex;
+
+  .numeroCartao {
+    width: 232;
+  }
+
+  .cvv {
+    width: 112px;
+  }
+`
+
+export const Vencimento = styled.div`
+  display: flex;
+  width: 95%;
+`

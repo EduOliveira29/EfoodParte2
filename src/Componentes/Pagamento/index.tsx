@@ -4,11 +4,14 @@ import { RootReducer } from '../../store'
 import { Container, SideBar, NumeroCartao, Vencimento } from './styles'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { useComprarMutation } from '../../services/api'
 import { Botão, BotãoLink } from '../../styles'
 import { useNavigate } from 'react-router-dom'
+import { ComprarCartao } from '../../store/reducers/form'
+import { useComprarMutation } from '../../services/api'
 
 const Pagamento = () => {
+  const ComprarCartao: ComprarCartao = {}
+  const [comprar] = useComprarMutation()
   const navigate = useNavigate()
   const { items } = useSelector((state: RootReducer) => state.cart)
   const PrecoTotal = () => {
@@ -17,9 +20,7 @@ const Pagamento = () => {
     }, 0)
   }
 
-  const [comprar] = useComprarMutation()
-
-  const formPagamento = useFormik({
+  const form = useFormik({
     initialValues: {
       nomeCartao: '',
       numeroCartao: '',
@@ -42,35 +43,38 @@ const Pagamento = () => {
         .min(4, 'o campo deve ter 4 digitos')
         .required('O campo é obrigatório'),
       mesvencimento: Yup.number()
-        .max(2, 'o campo deve ter 2 digitos')
+        .min(2, 'o campo deve ter 2 digitos')
         .required('O campo é obrigatório')
     }),
     onSubmit: (values) => {
       comprar({
-        pagamento: {
-          cartao: {
-            nomeCartao: values.nomeCartao,
-            numeroCartao: values.numeroCartao,
-            cvv: values.cvv,
-            vencimento: {
-              ano: values.anovencimento,
-              mes: values.mesvencimento
+        payment: {
+          card: {
+            name: values.nomeCartao,
+            number: values.numeroCartao,
+            code: values.cvv,
+            expires: {
+              year: values.anovencimento,
+              month: values.mesvencimento
             }
           }
-        }
+        },
+        products: []
       })
     }
   })
 
+  console.log(ComprarCartao)
+
   const irParaPagamento = () => {
-    if (formPagamento.isValid) {
+    if (form.isValid) {
       navigate('/Finalizacao')
     }
   }
 
   const getErrorMessage = (fieldName: string, message?: string) => {
-    const estaAlterado = fieldName in formPagamento.touched
-    const estaInvalido = fieldName in formPagamento.errors
+    const estaAlterado = fieldName in form.touched
+    const estaInvalido = fieldName in form.errors
 
     if (estaAlterado && estaInvalido) return message
     return ''
@@ -79,7 +83,7 @@ const Pagamento = () => {
   return (
     <Container>
       <SideBar>
-        <form onSubmit={formPagamento.handleSubmit}>
+        <form onSubmit={form.handleSubmit}>
           <h2>Pagamento - Valor a pagar {formataPreço(PrecoTotal())}</h2>
           <div>
             <div>
@@ -88,12 +92,12 @@ const Pagamento = () => {
                 id="nomeCartao"
                 type="text"
                 name="nomeCartao"
-                value={formPagamento.values.nomeCartao}
-                onChange={formPagamento.handleChange}
-                onBlur={formPagamento.handleBlur}
+                value={form.values.nomeCartao}
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
               />
               <small>
-                {getErrorMessage('nomeCartao', formPagamento.errors.nomeCartao)}
+                {getErrorMessage('nomeCartao', form.errors.nomeCartao)}
               </small>
             </div>
             <NumeroCartao>
@@ -104,15 +108,12 @@ const Pagamento = () => {
                   id="numeroCartao"
                   type="text"
                   name="numeroCartao"
-                  value={formPagamento.values.numeroCartao}
-                  onChange={formPagamento.handleChange}
-                  onBlur={formPagamento.handleBlur}
+                  value={form.values.numeroCartao}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
                 />
                 <small>
-                  {getErrorMessage(
-                    'numeroCartao',
-                    formPagamento.errors.numeroCartao
-                  )}
+                  {getErrorMessage('numeroCartao', form.errors.numeroCartao)}
                 </small>
               </div>
               <div>
@@ -122,13 +123,11 @@ const Pagamento = () => {
                   id="cvv"
                   type="text"
                   name="cvv"
-                  value={formPagamento.values.cvv}
-                  onChange={formPagamento.handleChange}
-                  onBlur={formPagamento.handleBlur}
+                  value={form.values.cvv}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
                 />
-                <small>
-                  {getErrorMessage('cvv', formPagamento.errors.cvv)}
-                </small>
+                <small>{getErrorMessage('cvv', form.errors.cvv)}</small>
               </div>
             </NumeroCartao>
             <Vencimento>
@@ -138,15 +137,12 @@ const Pagamento = () => {
                   id="mesvencimento"
                   type="number"
                   name="mesvencimento"
-                  value={formPagamento.values.mesvencimento}
-                  onChange={formPagamento.handleChange}
-                  onBlur={formPagamento.handleBlur}
+                  value={form.values.mesvencimento}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
                 />
                 <small>
-                  {getErrorMessage(
-                    'mesvencimento',
-                    formPagamento.errors.mesvencimento
-                  )}
+                  {getErrorMessage('mesvencimento', form.errors.mesvencimento)}
                 </small>
               </div>
               <div>
@@ -155,15 +151,12 @@ const Pagamento = () => {
                   id="anovencimento"
                   type="number"
                   name="anovencimento"
-                  value={formPagamento.values.anovencimento}
-                  onChange={formPagamento.handleChange}
-                  onBlur={formPagamento.handleBlur}
+                  value={form.values.anovencimento}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
                 />
                 <small>
-                  {getErrorMessage(
-                    'anovencimento',
-                    formPagamento.errors.anovencimento
-                  )}
+                  {getErrorMessage('anovencimento', form.errors.anovencimento)}
                 </small>
               </div>
             </Vencimento>
