@@ -15,7 +15,7 @@ export type ComprarCartao = {
       city: string
       zipCode: string
       number: number
-      completemnto?: string
+      complemento?: string
     }
   }
   payment: {

@@ -32,7 +32,8 @@ const Checkout = () => {
       CEP: '',
       numero: 0,
       endereco: '',
-      cidade: ''
+      cidade: '',
+      complemento: ''
     },
     validationSchema: Yup.object({
       receiver: Yup.string()
@@ -91,7 +92,8 @@ const Checkout = () => {
             description: formEntrega.values.endereco,
             city: formEntrega.values.cidade,
             zipCode: formEntrega.values.CEP,
-            number: formEntrega.values.numero
+            number: formEntrega.values.numero,
+            complemento: formEntrega.values.complemento
           }
         },
         payment: {
@@ -115,7 +117,7 @@ const Checkout = () => {
     }
   })
 
-  const getErrorMessage = (fieldName: string, message?: string) => {
+  const erroFormEntrega = (fieldName: string, message?: string) => {
     const estaAlterado = fieldName in formEntrega.touched
     const estaInvalido = fieldName in formEntrega.errors
 
@@ -123,8 +125,16 @@ const Checkout = () => {
     return ''
   }
 
+  const erroForm = (fieldName: string, message?: string) => {
+    const estaAlterado = fieldName in form.touched
+    const estaInvalido = fieldName in form.errors
+
+    if (estaAlterado && estaInvalido) return message
+    return ''
+  }
+
   const toggleVisibility = () => {
-    if (formEntrega.isValid) {
+    if (formEntrega.dirty) {
       setIsVisible(!isVisible)
     }
   }
@@ -173,7 +183,7 @@ const Checkout = () => {
                         onBlur={formEntrega.handleBlur}
                       />
                       <small>
-                        {getErrorMessage(
+                        {erroFormEntrega(
                           'receiver',
                           formEntrega.errors.receiver
                         )}
@@ -189,6 +199,12 @@ const Checkout = () => {
                         onChange={formEntrega.handleChange}
                         onBlur={formEntrega.handleBlur}
                       />
+                      <small>
+                        {erroFormEntrega(
+                          'endereco',
+                          formEntrega.errors.endereco
+                        )}
+                      </small>
                     </div>
                     <div>
                       <label htmlFor="cidade">Cidade</label>
@@ -200,6 +216,9 @@ const Checkout = () => {
                         onChange={formEntrega.handleChange}
                         onBlur={formEntrega.handleBlur}
                       />
+                      <small>
+                        {erroFormEntrega('cidade', formEntrega.errors.cidade)}
+                      </small>
                     </div>
                     <CepENumero>
                       <div>
@@ -213,7 +232,7 @@ const Checkout = () => {
                           onBlur={formEntrega.handleBlur}
                         />
                         <small>
-                          {getErrorMessage('CEP', formEntrega.errors.CEP)}
+                          {erroFormEntrega('CEP', formEntrega.errors.CEP)}
                         </small>
                       </div>
                       <div>
@@ -227,17 +246,32 @@ const Checkout = () => {
                           onBlur={formEntrega.handleBlur}
                         />
                         <small>
-                          {getErrorMessage('numero', formEntrega.errors.numero)}
+                          {erroFormEntrega('numero', formEntrega.errors.numero)}
                         </small>
                       </div>
                     </CepENumero>
                     <div>
-                      <label htmlFor="">Complemento (opcional)</label>
-                      <input type="text" />
+                      <label htmlFor="complemento">
+                        Complemento (opcional)
+                      </label>
+                      <input
+                        id="complemento"
+                        type="text"
+                        name="complemento"
+                        value={formEntrega.values.complemento}
+                        onChange={formEntrega.handleChange}
+                        onBlur={formEntrega.handleBlur}
+                      />
+                      <small>
+                        {erroFormEntrega(
+                          'complemento',
+                          formEntrega.errors.complemento
+                        )}
+                      </small>
                     </div>
                   </div>
                   <Botoes>
-                    <Botão onClick={toggleVisibility}>
+                    <Botão type="submit" onClick={toggleVisibility}>
                       Continuar com a entrega
                     </Botão>
                     <BotãoLink type="link" to={`/`}>
@@ -267,7 +301,7 @@ const Checkout = () => {
                         onBlur={form.handleBlur}
                       />
                       <small>
-                        {getErrorMessage('nomeCartao', form.errors.nomeCartao)}
+                        {erroForm('nomeCartao', form.errors.nomeCartao)}
                       </small>
                     </div>
                     <NumeroCartao>
@@ -283,10 +317,7 @@ const Checkout = () => {
                           onBlur={form.handleBlur}
                         />
                         <small>
-                          {getErrorMessage(
-                            'numeroCartao',
-                            form.errors.numeroCartao
-                          )}
+                          {erroForm('numeroCartao', form.errors.numeroCartao)}
                         </small>
                       </div>
                       <div>
@@ -300,7 +331,7 @@ const Checkout = () => {
                           onChange={form.handleChange}
                           onBlur={form.handleBlur}
                         />
-                        <small>{getErrorMessage('cvv', form.errors.cvv)}</small>
+                        <small>{erroForm('cvv', form.errors.cvv)}</small>
                       </div>
                     </NumeroCartao>
                     <Vencimento>
@@ -315,10 +346,7 @@ const Checkout = () => {
                           onBlur={form.handleBlur}
                         />
                         <small>
-                          {getErrorMessage(
-                            'mesvencimento',
-                            form.errors.mesvencimento
-                          )}
+                          {erroForm('mesvencimento', form.errors.mesvencimento)}
                         </small>
                       </div>
                       <div>
@@ -332,17 +360,14 @@ const Checkout = () => {
                           onBlur={form.handleBlur}
                         />
                         <small>
-                          {getErrorMessage(
-                            'anovencimento',
-                            form.errors.anovencimento
-                          )}
+                          {erroForm('anovencimento', form.errors.anovencimento)}
                         </small>
                       </div>
                     </Vencimento>
                   </div>
                   <div className="botoes">
-                    <Botão type="submit">Continuar com a entrega</Botão>
-                    <BotãoLink type="link" to={`/Entrega`}>
+                    <Botão type="submit">Finalizar pagamento</Botão>
+                    <BotãoLink type="link" to={`/`}>
                       Voltar para a edição de endereço
                     </BotãoLink>
                   </div>

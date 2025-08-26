@@ -38,6 +38,10 @@ export const Container = styled.div`
     color: ${Cores.corDeFundo};
   }
 
+  small {
+    margin: 8px;
+  }
+
   &.none {
     display: none;
   }
