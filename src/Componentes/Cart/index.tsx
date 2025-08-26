@@ -21,7 +21,6 @@ import { useNavigate } from 'react-router-dom'
 const Cart = () => {
   const { estaAberto, items } = useSelector((state: RootReducer) => state.cart)
   const navigate = useNavigate()
-
   const dispatch = useDispatch()
 
   const fecharCart = () => {
@@ -40,7 +39,7 @@ const Cart = () => {
 
   const irParaEntrega = () => {
     if (items.length >= 1) {
-      navigate('/Entrega')
+      navigate('/Checkout')
     }
   }
 

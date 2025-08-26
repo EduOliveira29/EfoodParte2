@@ -1,6 +1,35 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Restaurantes } from '../pages/Home'
-import { ComprarCartao } from '../store/reducers/form'
+
+type products = {
+  id: 1
+  price: 0
+}
+
+export type ComprarCartao = {
+  products: products[]
+  delivery: {
+    receiver: string
+    address: {
+      description: string
+      city: string
+      zipCode: string
+      number: number
+      completemnto?: string
+    }
+  }
+  payment: {
+    card: {
+      name: string
+      number: string
+      code: number
+      expires: {
+        month: number
+        year: number
+      }
+    }
+  }
+}
 
 const api = createApi({
   baseQuery: fetchBaseQuery({

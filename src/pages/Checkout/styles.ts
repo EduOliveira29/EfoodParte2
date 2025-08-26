@@ -13,13 +13,33 @@ export const Container = styled.div`
     width: 95%;
     background-color: ${Cores.corPrincipal};
     color: ${Cores.corSecundaria};
-    Line height: 100%;
-    font-size: 14px;
-    font-weight: bold;
   }
 
-  h3 {
+  label {
+    margin: 8px;
+    font-size: 14px;
+    line-height: 100%;
+    height: 16px;
+  }
+
+  input {
+    width: 95%;
+    margin: 8px;
+    font-size: 14px;
+    line-height: 100%;
+    background-color: ${Cores.corPrincipal};
+    height: 32px;
+  }
+
+  h2 {
+    font-size: 16px;
+    line-height: 100%;
     margin: 32px 0 16px 8px;
+    color: ${Cores.corDeFundo};
+  }
+
+  &.none {
+    display: none;
   }
 `
 
@@ -30,6 +50,33 @@ export const SideBar = styled.aside`
   height: 1624px;
   width: 100%;
 `
+
+export const CepENumero = styled.div`
+  display: flex;
+  width: 95%;
+`
+
+export const Botoes = styled.div`
+  margin-top: 24px;
+`
+
+export const NumeroCartao = styled.div`
+  display: flex;
+
+  .numeroCartao {
+    width: 232;
+  }
+
+  .cvv {
+    width: 112px;
+  }
+`
+
+export const Vencimento = styled.div`
+  display: flex;
+  width: 95%;
+`
+
 export const Texto = styled.p`
   margin: 0 8px 24px 8px;
   font-size: 14px;
