@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom'
+import { skipToken } from '@reduxjs/toolkit/query/react'
 import Apresentacao from '../../Componentes/Apresentacao'
 import Footer from '../../Componentes/Footer'
 import Header from '../../Componentes/Header'
@@ -31,7 +32,9 @@ export type Restaurante = {
 
 const Perfil = () => {
   const { id } = useParams()
-  const { data: Restaurante } = useGetCardapiosDeRestaurantesQuery(id!)
+  const { data: Restaurante } = useGetCardapiosDeRestaurantesQuery(
+    id ?? skipToken
+  )
 
   if (Restaurante && Restaurante.cardapio) {
     return (

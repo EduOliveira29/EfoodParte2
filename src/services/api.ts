@@ -42,7 +42,7 @@ const api = createApi({
     getCardapiosDeRestaurantes: builder.query<Restaurantes, string>({
       query: (id) => `restaurantes/${id}`
     }),
-    comprar: builder.mutation<any, ComprarCartao>({
+    comprar: builder.mutation<unknown, ComprarCartao>({
       query: (body) => ({
         url: 'checkout',
         method: 'POST',
