@@ -8,7 +8,7 @@ const Apresentacao = () => {
   const [Restaurante, setRestaurante] = useState<Restaurante>()
 
   useEffect(() => {
-    fetch(`https://fake-api-tau.vercel.app/api/efood/restaurantes/${id}`)
+    fetch(`https://api-ebac.vercel.app/api/efood/restaurantes/${id}`)
       .then((res) => res.json())
       .then((res) => setRestaurante(res))
   }, [id])
