@@ -10,7 +10,7 @@ import {
   Vencimento
 } from './styles'
 import * as Yup from 'yup'
-import { useComprarMutation } from '../../services/api'
+import { useComprarMutation, RespostaCheckout } from '../../services/api'
 import { useSelector } from 'react-redux'
 import { RootReducer } from '../../store'
 import { formataPreço } from '../../Componentes/Produto'
@@ -20,12 +20,8 @@ import { useState } from 'react'
 const Checkout = () => {
   const [isVisible, setIsVisible] = useState(false)
   const [comprar, { isSuccess, data }] = useComprarMutation()
-  const orderData = data as CompraResponse | undefined
+  const orderData = data as RespostaCheckout | undefined
   const { items } = useSelector((state: RootReducer) => state.cart)
-
-  interface CompraResponse {
-    orderId: string | number // ajuste para string ou number dependendo do seu backend
-  }
 
   const PrecoTotal = () => {
     return items.reduce((acumulador, valorAtual) => {
@@ -60,7 +56,7 @@ const Checkout = () => {
         .required('O campo é obrigatório')
     }),
     onSubmit: (values) => {
-      console.log()
+      console.log(values)
     }
   })
 

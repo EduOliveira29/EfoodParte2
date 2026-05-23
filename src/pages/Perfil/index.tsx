@@ -12,11 +12,6 @@ import Cart from '../../Componentes/Cart'
 export type Restaurante = {
   foto: string
   id?: number
-  titulo?: string
-  destacado?: boolean
-  tipo?: string
-  avaliacao?: number
-  descricao?: string
   capa?: string
   cardapio: [
     {

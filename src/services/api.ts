@@ -31,6 +31,10 @@ export type ComprarCartao = {
   }
 }
 
+export interface RespostaCheckout {
+  orderId: string | number
+}
+
 const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://api-ebac.vercel.app/api/efood'
@@ -42,7 +46,7 @@ const api = createApi({
     getCardapiosDeRestaurantes: builder.query<Restaurantes, string>({
       query: (id) => `restaurantes/${id}`
     }),
-    comprar: builder.mutation<unknown, ComprarCartao>({
+    comprar: builder.mutation<RespostaCheckout, ComprarCartao>({
       query: (body) => ({
         url: 'checkout',
         method: 'POST',
