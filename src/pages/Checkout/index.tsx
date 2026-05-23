@@ -20,7 +20,13 @@ import { useState } from 'react'
 const Checkout = () => {
   const [isVisible, setIsVisible] = useState(false)
   const [comprar, { isSuccess, data }] = useComprarMutation()
+  const orderData = data as CompraResponse | undefined
   const { items } = useSelector((state: RootReducer) => state.cart)
+
+  interface CompraResponse {
+    orderId: string | number // ajuste para string ou number dependendo do seu backend
+  }
+
   const PrecoTotal = () => {
     return items.reduce((acumulador, valorAtual) => {
       return (acumulador += valorAtual.preco)
@@ -54,7 +60,7 @@ const Checkout = () => {
         .required('O campo é obrigatório')
     }),
     onSubmit: (values) => {
-      console.log(values)
+      console.log()
     }
   })
 
@@ -141,11 +147,11 @@ const Checkout = () => {
 
   return (
     <>
-      {isSuccess ? (
+      {isSuccess && orderData ? (
         <Card title="Finalizaçao">
           <Container>
             <SideBar>
-              <h2>Pedido realizado - Ordem {data.orderId}</h2>
+              <h2>Pedido realizado - Ordem {orderData.orderId}</h2>
               <Texto>
                 Estamos felizes em informar que seu pedido já está em processo
                 de preparação e, em breve, será entregue no endereço fornecido.
