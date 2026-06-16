@@ -1,4 +1,7 @@
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useFormik } from 'formik'
+import { RootReducer } from '../../store'
 import Card from '../../Componentes/Card'
 import {
   Botoes,
@@ -11,17 +14,40 @@ import {
 } from './styles'
 import * as Yup from 'yup'
 import { useComprarMutation, RespostaCheckout } from '../../services/api'
-import { useSelector } from 'react-redux'
-import { RootReducer } from '../../store'
 import { formataPreço } from '../../Componentes/Produto'
 import { Botão, BotãoLink } from '../../styles'
-import { useState } from 'react'
 
 const Checkout = () => {
   const [isVisible, setIsVisible] = useState(false)
   const [comprar, { isSuccess, data }] = useComprarMutation()
   const orderData = data as RespostaCheckout | undefined
   const { items } = useSelector((state: RootReducer) => state.cart)
+  const buscarEndereco = async (cep: string) => {
+    // Remove caracteres não numéricos para garantir que o CEP esteja limpo
+    const cepLimpo = cep.replace(/\D/g, '')
+
+    if (cepLimpo.length === 8) {
+      try {
+        const resposta = await fetch(
+          `https://viacep.com.br/ws/${cepLimpo}/json/`
+        )
+        const dados = await resposta.json()
+
+        if (!dados.erro) {
+          // Aqui você preenche os campos do formEntrega
+          formEntrega.setFieldValue('endereco', dados.logradouro)
+          formEntrega.setFieldValue('cidade', dados.localidade)
+          // Você pode adicionar outros, se quiser:
+          // formEntrega.setFieldValue('bairro', dados.bairro);
+          // formEntrega.setFieldValue('uf', dados.uf);
+        } else {
+          alert('CEP não encontrado.')
+        }
+      } catch (erro) {
+        console.error('Erro ao buscar CEP:', erro)
+      }
+    }
+  }
 
   const PrecoTotal = () => {
     return items.reduce((acumulador, valorAtual) => {
@@ -181,7 +207,7 @@ const Checkout = () => {
                         type="text"
                         name="receiver"
                         value={formEntrega.values.receiver}
-                        onChange={formEntrega.handleChange}
+                        onChange={formEntrega.handleChange} // ADICIONEI ISSO
                         onBlur={formEntrega.handleBlur}
                       />
                       <small>
@@ -197,9 +223,9 @@ const Checkout = () => {
                         id="endereco"
                         type="text"
                         name="endereco"
-                        value={formEntrega.values.endereco}
-                        onChange={formEntrega.handleChange}
-                        onBlur={formEntrega.handleBlur}
+                        value={formEntrega.values.endereco} // O valor que vem do Formik
+                        onChange={formEntrega.handleChange} // O manipulador que permite a edição
+                        onBlur={formEntrega.handleBlur} // O manipulador que detecta o fim da edição
                       />
                       <small>
                         {erroFormEntrega(
@@ -214,9 +240,9 @@ const Checkout = () => {
                         id="cidade"
                         type="text"
                         name="cidade"
-                        value={formEntrega.values.cidade}
-                        onChange={formEntrega.handleChange}
-                        onBlur={formEntrega.handleBlur}
+                        value={formEntrega.values.cidade} // O valor que vem do Formik
+                        onChange={formEntrega.handleChange} // O manipulador que permite a edição
+                        onBlur={formEntrega.handleBlur} // O manipulador que detecta o fim da edição
                       />
                       <small>
                         {erroFormEntrega('cidade', formEntrega.errors.cidade)}
@@ -230,8 +256,14 @@ const Checkout = () => {
                           type="text"
                           name="CEP"
                           value={formEntrega.values.CEP}
-                          onChange={formEntrega.handleChange}
-                          onBlur={formEntrega.handleBlur}
+                          onChange={(e) => {
+                            formEntrega.handleChange(e)
+                            buscarEndereco(e.target.value) // Busca automática ao digitar 8 dígitos
+                          }}
+                          onBlur={(e) => {
+                            formEntrega.handleBlur(e) // Mantém a validação do Formik/Yup
+                            buscarEndereco(e.target.value) // Dispara a busca
+                          }}
                         />
                         <small>
                           {erroFormEntrega('CEP', formEntrega.errors.CEP)}
